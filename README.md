@@ -1,1 +1,1 @@
-# BroadcasterBot
+# BroadcasterTemplate
