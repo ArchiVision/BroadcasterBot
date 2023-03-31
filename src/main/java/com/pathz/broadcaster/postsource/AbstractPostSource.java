@@ -28,7 +28,7 @@ public abstract class AbstractPostSource implements PostSource {
         log.info("Checking for new post..");
         final Optional<List<SimplePostEvent>> newPosts = getPostGather().getNewPosts();
 
-        if (newPosts.isPresent()) {
+        if (newPosts.isPresent() && newPosts.get().size() > 0) {
             for (SimplePostEvent simplePostEvent : newPosts.get()) {
                 processEvent(simplePostEvent);
             }
@@ -36,12 +36,11 @@ public abstract class AbstractPostSource implements PostSource {
     }
 
     public void processEvent(PostEvent postEvent) {
-        log.info("Got new event={}", postEvent);
         publishEvent(postEvent);
     }
 
     private void publishEvent(PostEvent postEvent) {
-        log.info("Publishing event={} to a queue", postEvent);
+        log.info("Publishing event : {}", postEvent.getTrackingUuid());
         eventQueue.publishEvent(postEvent);
     }
 

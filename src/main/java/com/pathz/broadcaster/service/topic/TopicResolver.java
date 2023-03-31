@@ -5,7 +5,7 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.util.CoreMap;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,14 +13,23 @@ import java.util.List;
 import java.util.Properties;
 
 @Service
-@RequiredArgsConstructor
+@Slf4j
 public class TopicResolver {
-    public List<String> resolveTopicsFromPostInformation(String text) {
-        final Properties props = new Properties();
+    final Properties props;
+    final StanfordCoreNLP pipeline;
+
+    TopicResolver() {
+        log.info("Initializing topic NLP resolver...");
+        props = new Properties();
         props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner");
         props.setProperty("ner.useSUTime", "false");
 
-        final StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+        pipeline = new StanfordCoreNLP(props);
+
+        log.info("Initializing of topic NLP resolver is done");
+    }
+
+    public List<String> resolveTopicsFromPostInformation(String text) {
         final Annotation document = new Annotation(text);
 
         pipeline.annotate(document);

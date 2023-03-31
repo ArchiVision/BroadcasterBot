@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class NewYorkTimesPostSource extends AbstractPostSource {
+public class CnnPostSource extends AbstractPostSource {
+    private final CnnPostGather cnnPostGather;
+
     @Override
     public PostGather getPostGather() {
-        return new CnnPostGather();
+        return cnnPostGather;
     }
 }

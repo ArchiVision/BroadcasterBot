@@ -24,10 +24,10 @@ public class QueueProcessor implements EventQueue {
     private final BlockingQueue<PostEvent> queue;
     private final UserNotifier userNotifier;
 
-    @Scheduled(fixedRate = 500L, timeUnit = TimeUnit.MILLISECONDS)
+    @Scheduled(fixedRate = 4000L, timeUnit = TimeUnit.MILLISECONDS)
     @Override
     public void handleEvent() {
-        PostEvent newEvent = queue.poll();
+        final PostEvent newEvent = queue.poll();
         if (newEvent != null) {
             userNotifier.notifyUsers(newEvent);
         }
@@ -35,7 +35,8 @@ public class QueueProcessor implements EventQueue {
 
     @Override
     public void publishEvent(PostEvent event) {
-        log.info("Adding event={} to queue", event);
+        log.info("Adding event={} to queue", event.getTrackingUuid());
         queue.add(event);
     }
+
 }

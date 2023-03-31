@@ -67,8 +67,8 @@ public class UsersService {
 
     @Async
     public void notifyAboutNewPost(PostEvent event) {
-        List<User> allUsersByTopic = getAllUsersByOneOfTopics(event.getTopics());
-        log.info("Users that related to {} topic={}", event.getTopics(), allUsersByTopic);
+        final List<User> allUsersByTopic = getAllUsersByOneOfTopics(event.getTopics());
+        log.info("Notifying users: {}, by topics : {}", allUsersByTopic, event.getTopics());
         for (User user : allUsersByTopic) {
             sendMessage(event, user);
         }
