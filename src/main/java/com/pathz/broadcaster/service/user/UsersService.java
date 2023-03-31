@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
-import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -70,23 +69,13 @@ public class UsersService {
     public void notifyAboutNewPost(PostEvent event) {
         List<User> allUsersByTopic = getAllUsersByOneOfTopics(event.getTopics());
         log.info("Users that related to {} topic={}", event.getTopics(), allUsersByTopic);
-        executePartitioningNotifying(allUsersByTopic, event);
-    }
-
-    private void executePartitioningNotifying(List<User> allUsersByTopic, PostEvent event) {
-        int chunkSize = (int) Math.ceil((double) allUsersByTopic.size() / notifierThreadPoolSize);
-
-        List<List<User>> subLists = IntStream.range(0, notifierThreadPoolSize)
-                .mapToObj(i -> allUsersByTopic.subList(i * chunkSize, Math.min((i + 1) * chunkSize, allUsersByTopic.size())))
-                .toList();
-
-        for (List<User> subList : subLists) {
-            usersNotifierExecutorService.submit(() -> subList.forEach(user -> sendMessage(event, user)));
+        for (User user : allUsersByTopic) {
+            sendMessage(event, user);
         }
     }
 
     private void sendMessage(PostEvent event, User user) {
-        messageSender.sendMessage(user, event.getBody());
+        messageSender.sendMessage(user, event.getTitle());
     }
 }
 

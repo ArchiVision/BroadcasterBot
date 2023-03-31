@@ -11,5 +11,6 @@ import java.util.UUID;
 public final class SimplePostEvent implements PostEvent {
     private final String uuid = UUID.randomUUID().toString();
     private final List<String> topics;
-    private final String body;
+    private final String title;
+    private final String description;
 }

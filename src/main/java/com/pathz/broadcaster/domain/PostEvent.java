@@ -6,5 +6,5 @@ public interface PostEvent {
     String getUuid();
 
     List<String> getTopics();
-    String getBody();
+    String getTitle();
 }
