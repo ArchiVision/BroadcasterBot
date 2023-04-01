@@ -17,7 +17,7 @@ Once the bot is running, users can interact with it by sending commands. The fol
 ## Architecture
 The architecture of the project consists of a DAO layer with entities for the User and Topic domain models. The bot checks for new posts in an async scheduled way and publishes events to a queue. The QueueProcessor service handles all events and sends messages to all users related to the topic when a new post is available.
 
-![11111111](https://user-images.githubusercontent.com/72043323/229278806-a64bfe28-5c64-45e1-9ca2-fdf2c16f96b1.png)
+![11111111](https://user-images.githubusercontent.com/72043323/229279136-2007bf8e-8671-4888-aa09-754353648a0e.png)
 
 
 ## Technologies
