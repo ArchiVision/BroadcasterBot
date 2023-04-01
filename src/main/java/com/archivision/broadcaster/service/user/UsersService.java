@@ -54,14 +54,11 @@ public class UsersService {
 
     @Transactional
     public void removeTopicFromUser(Long userId, String topicName) {
-        final Optional<User> optionalUser = Optional.ofNullable(userRepository.findByTelegramUserId(userId));
-        if (optionalUser.isEmpty()) {
-            throw new IllegalArgumentException("User not found");
+        final User user = userRepository.findByTelegramUserId(userId);
+        if (user == null) {
+            throw new UserNotFoundException(userId);
         }
-
-        User user = optionalUser.get();
         user.removeTopic(topicRepository.findTopicByName(topicName));
-
         userRepository.save(user);
     }
 
