@@ -10,12 +10,9 @@ import com.archivision.broadcaster.repo.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 
 @Service
@@ -27,9 +24,6 @@ public class UsersService {
 
     private final MessageSender messageSender;
     private final ExecutorService usersNotifierExecutorService;
-
-    @Value("${thread.pool.size}")
-    private int notifierThreadPoolSize;
 
     @Transactional
     public void addTopicToUser(Long userId, String topicName) {
@@ -67,14 +61,15 @@ public class UsersService {
         return userRepository.findByTelegramUserId(userId);
     }
 
-    @Async
     @Transactional
     public void notifyAboutNewPost(PostEvent event) {
         final List<User> allUsersByTopic = userRepository.findUsersByTopicNames(event.getTopics());
         log.info("Notifying users: {}, by topics : {}", allUsersByTopic, event.getTopics());
-        for (User user : allUsersByTopic) {
-            sendMessage(event, user);
-        }
+        usersNotifierExecutorService.submit(() -> {
+            for (User user : allUsersByTopic) {
+                sendMessage(event, user);
+            }
+        });
     }
 
     private void sendMessage(PostEvent event, User user) {
