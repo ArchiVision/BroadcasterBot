@@ -1,4 +1,4 @@
-package com.archivision.broadcaster.bot.commands;
+package com.archivision.broadcaster.bot.command;
 
 import com.archivision.broadcaster.domain.CommunicationData;
 

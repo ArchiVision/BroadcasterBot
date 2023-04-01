@@ -1,7 +1,8 @@
-package com.archivision.broadcaster.bot.commands;
+package com.archivision.broadcaster.bot.command.user;
 
 
-import com.archivision.broadcaster.bot.commands.utils.TopicValidator;
+import com.archivision.broadcaster.bot.command.RequestCommand;
+import com.archivision.broadcaster.bot.command.util.TopicValidator;
 import com.archivision.broadcaster.domain.CommunicationData;
 import com.archivision.broadcaster.domain.entity.Topic;
 import com.archivision.broadcaster.domain.entity.User;
@@ -46,7 +47,7 @@ public class AddTopicCommand implements RequestCommand {
             return new CommunicationData("This topic already exist", data.telegramUserId());
         }
 
-        usersService.addTopicToUser(data.telegramUserId(), topicName);
+        user.addTopic(topicName);
         return new CommunicationData("Successfully created topic for user", data.telegramUserId());
     }
 

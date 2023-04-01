@@ -9,8 +9,10 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class BotStarter {
     private final BotRegistrar botRegistrar;
     private final BroadcasterBot broadcasterBot;
+    private final BotUpdateHandler botUpdateHandler;
 
     public void start() throws TelegramApiException {
+        broadcasterBot.setUpdateHandler(botUpdateHandler);
         botRegistrar.register(broadcasterBot);
     }
 }

@@ -46,6 +46,20 @@ public class User {
         topic.getUsers().add(this);
     }
 
+    public void addTopic(String topicName) {
+        Topic topic = new Topic();
+        topic.setName(topicName);
+        topics.add(topic);
+        topic.getUsers().add(this);
+    }
+
+    public void removeTopic(String topicName) {
+        Topic topic = new Topic();
+        topic.setName(topicName);
+        topics.remove(topic);
+        topic.getUsers().remove(this);
+    }
+
     public void removeTopic(Topic topic) {
         topics.remove(topic);
         topic.getUsers().remove(this);

@@ -1,4 +1,4 @@
-package com.archivision.broadcaster.bot.commands.utils;
+package com.archivision.broadcaster.bot.command.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

@@ -1,5 +1,6 @@
-package com.archivision.broadcaster.bot.commands;
+package com.archivision.broadcaster.bot.command.user;
 
+import com.archivision.broadcaster.bot.command.RequestCommand;
 import com.archivision.broadcaster.domain.CommunicationData;
 import com.archivision.broadcaster.domain.entity.Topic;
 import com.archivision.broadcaster.domain.entity.User;

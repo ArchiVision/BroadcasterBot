@@ -1,5 +1,6 @@
-package com.archivision.broadcaster.bot.commands;
+package com.archivision.broadcaster.bot.command.user;
 
+import com.archivision.broadcaster.bot.command.RequestCommand;
 import com.archivision.broadcaster.domain.CommunicationData;
 import com.archivision.broadcaster.domain.entity.User;
 import com.archivision.broadcaster.service.user.UsersService;
@@ -25,13 +26,11 @@ public class RemoveTopicCommand implements RequestCommand {
         final String topicName = inputTextArray[1];
         final User user = usersService.findByTelegramUserId(data.telegramUserId());
 
-        if (user == null) {
-            return new CommunicationData("Sorry, we don't have you in DB, please add new topic", data.telegramUserId());
-        } else if (user.getTopics().isEmpty()) {
+        if (user.getTopics().isEmpty()) {
             return new CommunicationData("Sorry, you don't have any topics", data.telegramUserId());
         }
 
-        usersService.removeTopicFromUser(data.telegramUserId(), topicName);
+        user.removeTopic(topicName);
 
         return new CommunicationData("Successfully removed topic", data.telegramUserId());
     }

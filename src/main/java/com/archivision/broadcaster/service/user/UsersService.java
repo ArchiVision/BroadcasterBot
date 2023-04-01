@@ -10,9 +10,12 @@ import com.archivision.broadcaster.repo.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
 @Service
@@ -23,6 +26,9 @@ public class UsersService {
     private final TopicRepository topicRepository;
     private final MessageSender messageSender;
     private final ExecutorService usersNotifierExecutorService;
+
+    @Value(value = "${admins.telegram.id}")
+    private Set<Long> adminIdentifiers = new HashSet<>();
 
     @Transactional
     public void addTopicToUser(Long userId, String topicName) {
@@ -71,8 +77,21 @@ public class UsersService {
         });
     }
 
+    public boolean isAdmin(Long tgId) {
+        return adminIdentifiers.contains(tgId);
+    }
+
     private void sendMessage(PostEvent event, User user) {
         messageSender.sendMessage(user, event.getTitle());
+    }
+
+    public boolean removeUser(Long userId) {
+        User user = userRepository.findByTelegramUserId(userId);
+        if (user != null) {
+            userRepository.delete(user);
+            return true;
+        }
+        return false;
     }
 }
 
