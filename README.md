@@ -9,6 +9,7 @@ Broadcaster is a Telegram bot designed to aggregate articles/posts on specific t
 
 ## Architecture
 The architecture of the project consists of a DAO layer with entities for the User and Topic domain models. The bot checks for new posts in an async scheduled way and publishes events to a queue. The QueueProcessor service handles all events and sends messages to all users related to the topic when a new post is available.
+![11111111](https://user-images.githubusercontent.com/72043323/229278513-8d6606cc-3b52-414f-a057-76311a30a998.png)
 
 ## Technologies
 The project uses the following technologies:
