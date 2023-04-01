@@ -10,7 +10,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @RequiredArgsConstructor
 @Primary
 public class BotStarter {
-    //
     private final BotRegistrar botRegistrar;
     private final BroadcasterBot broadcasterBot;
     private final BotUpdateHandler botUpdateHandler;
