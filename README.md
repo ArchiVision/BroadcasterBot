@@ -8,6 +8,9 @@ Broadcaster is a Telegram bot designed to aggregate articles/posts on specific t
 - The bot has a QueueProcessor service that handles all events and sends messages to all users related to the topic when a new post is available.
 
 ## Usage
+To reach bot:
+https://t.me/broadycasterbot
+
 Once the bot is running, users can interact with it by sending commands. The following commands are available:
 - /add_topic <topic> - Subscribe to a topic.
 - /rm_topic <topic> - Unsubscribe from a topic.

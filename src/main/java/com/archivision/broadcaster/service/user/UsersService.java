@@ -58,8 +58,7 @@ public class UsersService {
             return false;
         }
         Topic topic = topicService.findOrCreateTopic(topicName);
-        user.addTopic(topic);
-        return true;
+        return user.addTopic(topic);
     }
 
     public boolean isAdmin(Long tgId) {

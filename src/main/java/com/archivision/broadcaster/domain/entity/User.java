@@ -29,18 +29,13 @@ public class User {
     )
     private Set<Topic> topics = new HashSet<>();
 
-    public void addTopic(Topic topic) {
-        topics.add(topic);
-        topic.getUsers().add(this);
-    }
-
-    public void addTopic(String topicName) {
-        Topic topic = new Topic();
-        topic.setName(topicName);
+    public boolean addTopic(Topic topic) {
         if (!topics.contains(topic)) {
             topics.add(topic);
             topic.getUsers().add(this);
+            return true;
         }
+        return false;
     }
 
     public void removeTopic(String topicName) {
