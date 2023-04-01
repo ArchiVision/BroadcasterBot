@@ -3,10 +3,9 @@ package com.archivision.broadcaster.service.user;
 import com.archivision.broadcaster.domain.PostEvent;
 import com.archivision.broadcaster.domain.entity.Topic;
 import com.archivision.broadcaster.domain.entity.User;
-import com.archivision.broadcaster.exception.user.UserNotFoundException;
 import com.archivision.broadcaster.messagesender.MessageSender;
-import com.archivision.broadcaster.repo.TopicRepository;
 import com.archivision.broadcaster.repo.UserRepository;
+import com.archivision.broadcaster.service.topic.TopicService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
@@ -23,7 +21,7 @@ import java.util.concurrent.ExecutorService;
 @Slf4j
 public class UsersService {
     private final UserRepository userRepository;
-    private final TopicRepository topicRepository;
+    private final TopicService topicService;
     private final MessageSender messageSender;
     private final ExecutorService usersNotifierExecutorService;
 
@@ -31,33 +29,7 @@ public class UsersService {
     private Set<Long> adminIdentifiers = new HashSet<>();
 
     @Transactional
-    public void addTopicToUser(Long userId, String topicName) {
-        final User user = userRepository.findByTelegramUserId(userId);
-        if (user == null) {
-            throw new UserNotFoundException(userId);
-        }
-
-        Topic topic = topicRepository.findTopicByName(topicName);
-        if (topic == null) {
-            topic = new Topic();
-            topic.setName(topicName);
-        }
-
-        user.addTopic(topic);
-    }
-
-    @Transactional
     public void save(User user) {
-        userRepository.save(user);
-    }
-
-    @Transactional
-    public void removeTopicFromUser(Long userId, String topicName) {
-        final User user = userRepository.findByTelegramUserId(userId);
-        if (user == null) {
-            throw new UserNotFoundException(userId);
-        }
-        user.removeTopic(topicRepository.findTopicByName(topicName));
         userRepository.save(user);
     }
 
@@ -68,21 +40,30 @@ public class UsersService {
 
     @Transactional
     public void notifyAboutNewPost(PostEvent event) {
-        final List<User> allUsersByTopic = userRepository.findUsersByTopicNames(event.getTopics());
-        log.info("Notifying users: {}, by topics : {}", allUsersByTopic, event.getTopics());
-        usersNotifierExecutorService.submit(() -> {
-            for (User user : allUsersByTopic) {
-                sendMessage(event, user);
-            }
-        });
+        final Set<User> allUsersByTopic = userRepository.findUsersByTopicNames(event.getTopics());
+        if (!allUsersByTopic.isEmpty()) {
+            log.info("Notifying users: {}, by topics : {}", allUsersByTopic, event.getTopics());
+            usersNotifierExecutorService.submit(() -> {
+                for (User user : allUsersByTopic) {
+                    messageSender.sendMessage(user.getTelegramUserId().toString(), event.getBodyText());
+                }
+            });
+        }
+    }
+
+    @Transactional
+    public boolean addUserTopic(Long telegramId, String topicName) {
+        User user = userRepository.findByTelegramUserId(telegramId);
+        if (user == null) {
+            return false;
+        }
+        Topic topic = topicService.findOrCreateTopic(topicName);
+        user.addTopic(topic);
+        return true;
     }
 
     public boolean isAdmin(Long tgId) {
         return adminIdentifiers.contains(tgId);
-    }
-
-    private void sendMessage(PostEvent event, User user) {
-        messageSender.sendMessage(user, event.getTitle());
     }
 
     public boolean removeUser(Long userId) {

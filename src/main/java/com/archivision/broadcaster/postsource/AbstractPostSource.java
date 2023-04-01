@@ -23,7 +23,7 @@ public abstract class AbstractPostSource implements PostSource {
     @Autowired
     private final EventQueue eventQueue;
 
-    @Scheduled(fixedRate = 5000L, timeUnit = TimeUnit.MILLISECONDS)
+    @Scheduled(fixedRate = 4000L, timeUnit = TimeUnit.MILLISECONDS)
     public void checkNewPost() {
         log.info("Checking for new post..");
         final Optional<List<SimplePostEvent>> newPosts = getPostGather().getNewPosts();

@@ -14,7 +14,6 @@ public class PostUserNotifier implements UserNotifier {
 
     @Override
     public void notifyUsers(PostEvent event) {
-        log.info("Notifying all users about new event={}", event);
         userService.notifyAboutNewPost(event);
     }
 }

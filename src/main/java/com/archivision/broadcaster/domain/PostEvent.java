@@ -6,4 +6,6 @@ public interface PostEvent {
     String getTrackingUuid();
     Set<String> getTopics();
     String getTitle();
+    String getDescription();
+    String getBodyText();
 }

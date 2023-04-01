@@ -5,11 +5,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 @Configuration
 @PropertySource("classpath:application.properties")
@@ -29,5 +28,11 @@ public class BeanConfig {
     @Bean
     public ExecutorService getUserNotifierExecutorService() {
         return Executors.newFixedThreadPool(notifierThreadPoolSize);
+    }
+
+    @Bean
+    public TaskScheduler taskScheduler() {
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
+        return new ConcurrentTaskScheduler(scheduledExecutorService);
     }
 }

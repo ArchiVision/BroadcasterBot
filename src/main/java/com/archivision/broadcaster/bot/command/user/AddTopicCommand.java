@@ -19,8 +19,8 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class AddTopicCommand implements RequestCommand {
     private final UserRepository userRepository;
-    private final UsersService usersService;
     private final TopicValidator topicValidator;
+    private final UsersService usersService;
 
     @Override
     @Transactional
@@ -46,8 +46,7 @@ public class AddTopicCommand implements RequestCommand {
         if (isTopicAlreadyExist) {
             return new CommunicationData("This topic already exist", data.telegramUserId());
         }
-
-        user.addTopic(topicName);
+        usersService.addUserTopic(data.telegramUserId(), topicName);
         return new CommunicationData("Successfully created topic for user", data.telegramUserId());
     }
 

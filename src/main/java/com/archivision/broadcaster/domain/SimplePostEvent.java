@@ -12,4 +12,9 @@ public final class SimplePostEvent implements PostEvent {
     private final Set<String> topics;
     private final String title;
     private final String description;
+
+    @Override
+    public String getBodyText() {
+        return title + "\n\n" + description;
+    }
 }
