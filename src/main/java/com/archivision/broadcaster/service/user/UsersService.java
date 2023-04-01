@@ -21,7 +21,6 @@ import java.util.concurrent.ExecutorService;
 public class UsersService {
     private final UserRepository userRepository;
     private final TopicRepository topicRepository;
-
     private final MessageSender messageSender;
     private final ExecutorService usersNotifierExecutorService;
 
