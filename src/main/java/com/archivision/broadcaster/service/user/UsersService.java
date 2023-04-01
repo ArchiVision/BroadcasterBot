@@ -56,7 +56,7 @@ public class UsersService {
     public void removeTopicFromUser(Long userId, String topicName) {
         final Optional<User> optionalUser = Optional.ofNullable(userRepository.findByTelegramUserId(userId));
         if (optionalUser.isEmpty()) {
-            throw new IllegalArgumentException("User not found");
+            throw new UserNotFoundException(userId);
         }
 
         User user = optionalUser.get();
