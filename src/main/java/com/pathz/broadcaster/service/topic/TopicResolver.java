@@ -8,9 +8,9 @@ import edu.stanford.nlp.util.CoreMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -29,12 +29,12 @@ public class TopicResolver {
         log.info("Initializing of topic NLP resolver is done");
     }
 
-    public List<String> resolveTopicsFromPostInformation(String text) {
+    public Set<String> resolveTopicsFromPostInformation(String text) {
         final Annotation document = new Annotation(text);
 
         pipeline.annotate(document);
 
-        List<String> topics = new ArrayList<>();
+        Set<String> topics = new HashSet<>();
         for (CoreMap sentence : document.get(CoreAnnotations.SentencesAnnotation.class)) {
             for (CoreLabel token : sentence.get(CoreAnnotations.TokensAnnotation.class)) {
                 String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);

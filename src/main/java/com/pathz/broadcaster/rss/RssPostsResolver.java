@@ -1,6 +1,7 @@
 package com.pathz.broadcaster.rss;
 
 import com.pathz.broadcaster.domain.SimplePostEvent;
+import com.pathz.broadcaster.exception.rss.CannotRetrieveRssInfoException;
 import com.pathz.broadcaster.service.topic.TopicResolver;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Component
@@ -35,12 +37,12 @@ public class RssPostsResolver {
                 final String title = entry.getTitle();
                 final String description = entry.getDescription().getValue();
 
-                final List<String> topics = topicResolver.resolveTopicsFromPostInformation(title + " " + description);
+                final Set<String> topics = topicResolver.resolveTopicsFromPostInformation(title + " " + description);
 
                 posts.add(new SimplePostEvent(trackingId, topics, title, description));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new CannotRetrieveRssInfoException("Unable to get rss news entries", e);
         }
 
         return posts;

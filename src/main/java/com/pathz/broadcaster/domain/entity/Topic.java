@@ -1,25 +1,29 @@
 package com.pathz.broadcaster.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.hibernate.annotations.NaturalId;
 
-@Entity
-@Table(name = "topics")
+import java.util.HashSet;
+import java.util.Set;
+
+@NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "name")
+@Entity
+@ToString(exclude = {"users"})
+@Table(name = "topic")
 public class Topic {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
-    @Column(name = "topic_name")
-    private String topicName;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false)
-    @ToString.Exclude
-    private User user;
+    @NaturalId
+    @Column(nullable = false, unique = true)
+    private String name;
+
+    @Setter(AccessLevel.PRIVATE)
+    @ManyToMany(mappedBy = "topics")
+    private Set<User> users = new HashSet<>();
 }

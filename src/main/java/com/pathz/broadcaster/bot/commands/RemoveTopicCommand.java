@@ -2,20 +2,19 @@ package com.pathz.broadcaster.bot.commands;
 
 import com.pathz.broadcaster.domain.CommunicationData;
 import com.pathz.broadcaster.domain.entity.User;
-import com.pathz.broadcaster.repo.TopicRepository;
-import com.pathz.broadcaster.repo.UserRepository;
 import com.pathz.broadcaster.service.user.UsersService;
+import com.pathz.broadcaster.util.command.BotCmds;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class RemoveTopicCommand implements RequestCommand {
-    private final UserRepository userRepository;
     private final UsersService usersService;
-    private final TopicRepository topicRepository;
 
     @Override
+    @Transactional
     public CommunicationData perform(CommunicationData data) {
         final String[] inputTextArray = data.text().split(" ");
 
@@ -24,11 +23,11 @@ public class RemoveTopicCommand implements RequestCommand {
         }
 
         final String topicName = inputTextArray[1];
-        final User user = userRepository.findByTelegramId(data.telegramUserId());
+        final User user = usersService.findByTelegramUserId(data.telegramUserId());
 
         if (user == null) {
             return new CommunicationData("Sorry, we don't have you in DB, please add new topic", data.telegramUserId());
-        } else if (topicRepository.findAllTopicsByTopicNameAndUser(topicName, user).isEmpty()){
+        } else if (user.getTopics().isEmpty()) {
             return new CommunicationData("Sorry, you don't have any topics", data.telegramUserId());
         }
 
@@ -39,6 +38,6 @@ public class RemoveTopicCommand implements RequestCommand {
 
     @Override
     public String getCommandName() {
-        return "/rm_topic";
+        return BotCmds.REMOVE_TOPIC;
     }
 }

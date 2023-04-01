@@ -1,10 +1,10 @@
 package com.pathz.broadcaster.domain;
 
-import java.util.List;
+import java.util.Set;
 
 public interface PostEvent {
     String getTrackingUuid();
 
-    List<String> getTopics();
+    Set<String> getTopics();
     String getTitle();
 }

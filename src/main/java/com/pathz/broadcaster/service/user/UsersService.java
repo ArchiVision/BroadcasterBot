@@ -3,6 +3,7 @@ package com.pathz.broadcaster.service.user;
 import com.pathz.broadcaster.domain.PostEvent;
 import com.pathz.broadcaster.domain.entity.Topic;
 import com.pathz.broadcaster.domain.entity.User;
+import com.pathz.broadcaster.exception.user.UserNotFoundException;
 import com.pathz.broadcaster.messagesender.MessageSender;
 import com.pathz.broadcaster.repo.TopicRepository;
 import com.pathz.broadcaster.repo.UserRepository;
@@ -32,42 +33,47 @@ public class UsersService {
 
     @Transactional
     public void addTopicToUser(Long userId, String topicName) {
-        final Optional<User> optionalUser = Optional.ofNullable(userRepository.findByTelegramId(userId));
-        if (optionalUser.isEmpty()) {
-            throw new IllegalArgumentException("User not found");
+        final User user = userRepository.findByTelegramUserId(userId);
+        if (user == null) {
+            throw new UserNotFoundException(userId);
         }
 
-        final User user = optionalUser.get();
-
-        final Topic topic = new Topic();
-        topic.setTopicName(topicName);
-        topic.setUser(user);
+        Topic topic = topicRepository.findTopicByName(topicName);
+        if (topic == null) {
+            topic = new Topic();
+            topic.setName(topicName);
+        }
 
         user.addTopic(topic);
+    }
 
+    @Transactional
+    public void save(User user) {
         userRepository.save(user);
     }
 
     @Transactional
     public void removeTopicFromUser(Long userId, String topicName) {
-        final Optional<User> optionalUser = Optional.ofNullable(userRepository.findByTelegramId(userId));
+        final Optional<User> optionalUser = Optional.ofNullable(userRepository.findByTelegramUserId(userId));
         if (optionalUser.isEmpty()) {
             throw new IllegalArgumentException("User not found");
         }
 
         User user = optionalUser.get();
-        user.removeTopic(topicRepository.findTopicByTopicName(topicName));
+        user.removeTopic(topicRepository.findTopicByName(topicName));
 
         userRepository.save(user);
     }
 
-    public List<User> getAllUsersByOneOfTopics(List<String> topic) {
-        return List.of(new User(), new User());
+    @Transactional
+    public User findByTelegramUserId(Long userId) {
+        return userRepository.findByTelegramUserId(userId);
     }
 
     @Async
+    @Transactional
     public void notifyAboutNewPost(PostEvent event) {
-        final List<User> allUsersByTopic = getAllUsersByOneOfTopics(event.getTopics());
+        final List<User> allUsersByTopic = userRepository.findUsersByTopicNames(event.getTopics());
         log.info("Notifying users: {}, by topics : {}", allUsersByTopic, event.getTopics());
         for (User user : allUsersByTopic) {
             sendMessage(event, user);

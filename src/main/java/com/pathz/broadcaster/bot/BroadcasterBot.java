@@ -6,6 +6,7 @@ import com.pathz.broadcaster.bot.commands.RequestCommand;
 import com.pathz.broadcaster.bot.commands.utils.InputCommandMapper;
 import com.pathz.broadcaster.bot.commands.utils.RequestValidator;
 import com.pathz.broadcaster.domain.CommunicationData;
+import com.pathz.broadcaster.exception.bot.UnableSendMessageException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +52,7 @@ public class BroadcasterBot extends TelegramLongPollingBot {
                                         .text(requestCommand.perform(new CommunicationData(textFromUser, userId)).text())
                                         .build());
                         } catch (TelegramApiException e) {
-                            throw new RuntimeException(e);
+                            throw new UnableSendMessageException("Cannot send a message", e);
                         }
                     }
                 }
