@@ -5,7 +5,7 @@ import com.archivision.broadcaster.domain.SimplePostEvent;
 import java.util.List;
 
 public abstract class AbstractRssPostGather implements RssPostGather {
-    public List<SimplePostEvent> callCnnRss() {
+    public List<SimplePostEvent> callRss() {
         return getRssPostResolver().resolveBatchFromRssUrl(getRssUri());
     }
 }

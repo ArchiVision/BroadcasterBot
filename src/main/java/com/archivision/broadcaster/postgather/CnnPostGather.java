@@ -21,7 +21,7 @@ public class CnnPostGather extends AbstractRssPostGather {
     public Optional<List<SimplePostEvent>> getNewPosts() {
         log.info("Trying to get latest posts from CNN...");
 
-        final List<SimplePostEvent> simplePostEvents = callCnnRss();
+        final List<SimplePostEvent> simplePostEvents = callRss();
         log.info("Resolved {} posts from cnn", simplePostEvents == null ? 0 : simplePostEvents.size());
 
         if (previousPosts == null && simplePostEvents != null) {

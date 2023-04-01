@@ -18,11 +18,9 @@ import java.util.function.Predicate;
 @Slf4j
 @RequiredArgsConstructor
 public class BotUpdateHandler {
-
     private final List<RequestCommand> commandList;
     private final InputCommandMapper inputCommandMapper;
     private final UsersService usersService;
-
     private final MessageSender messageSender;
 
     public void handle(Update update) {

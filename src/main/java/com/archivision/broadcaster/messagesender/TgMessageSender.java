@@ -20,7 +20,7 @@ public class TgMessageSender implements MessageSender {
 
     @Override
     public void sendMessage(String userId, String message) {
-        log.info("Sending message={} to={}", message, userId);
+        log.info("Sending message to={}", userId);
         executeSendMessage(userId, message);
     }
 

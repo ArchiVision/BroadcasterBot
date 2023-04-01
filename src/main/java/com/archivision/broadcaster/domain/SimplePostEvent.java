@@ -12,9 +12,12 @@ public final class SimplePostEvent implements PostEvent {
     private final Set<String> topics;
     private final String title;
     private final String description;
+    private final String mediaOriginName;
+    private final String linkToOriginal;
+    private final String postTime;
 
     @Override
     public String getBodyText() {
-        return title + "\n\n" + description;
+        return mediaOriginName + "\n\n" + title + "\n\n" + description + "\n\n" + postTime + "\n\n" + linkToOriginal;
     }
 }

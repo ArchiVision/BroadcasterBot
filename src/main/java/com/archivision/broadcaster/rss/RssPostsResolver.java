@@ -13,10 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -32,8 +29,12 @@ public class RssPostsResolver {
             final SyndFeedInput input = new SyndFeedInput();
             final SyndFeed feed = input.build(new XmlReader(url));
 
+            final String mediaName = feed.getTitle();
+
             for (SyndEntry entry : feed.getEntries()) {
                 final String trackingId = UUID.randomUUID().toString();
+                final String linkToPostOrigin = entry.getLink();
+                final Date postTime = entry.getPublishedDate();
 
                 final String title = entry.getTitle();
                 SyndContent syndContent = entry.getDescription();
@@ -44,7 +45,7 @@ public class RssPostsResolver {
 
                 final Set<String> topics = topicResolver.resolveTopicsFromPostInformation(title + " " + description);
 
-                posts.add(new SimplePostEvent(trackingId, topics, title, description));
+                posts.add(new SimplePostEvent(trackingId, topics, title, description, mediaName, linkToPostOrigin, postTime.toString()));
             }
         } catch (Exception e) {
             throw new CannotRetrieveRssInfoException("Unable to get rss news entries", e);
