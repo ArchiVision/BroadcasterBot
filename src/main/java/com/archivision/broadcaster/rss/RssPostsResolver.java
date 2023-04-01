@@ -3,6 +3,7 @@ package com.archivision.broadcaster.rss;
 import com.archivision.broadcaster.domain.SimplePostEvent;
 import com.archivision.broadcaster.exception.rss.CannotRetrieveRssInfoException;
 import com.archivision.broadcaster.service.topic.TopicResolver;
+import com.rometools.rome.feed.synd.SyndContent;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
@@ -35,7 +36,11 @@ public class RssPostsResolver {
                 final String trackingId = UUID.randomUUID().toString();
 
                 final String title = entry.getTitle();
-                final String description = entry.getDescription().getValue();
+                SyndContent syndContent = entry.getDescription();
+                String description = "*Empty*";
+                if (syndContent != null) {
+                    description = syndContent.getValue();
+                }
 
                 final Set<String> topics = topicResolver.resolveTopicsFromPostInformation(title + " " + description);
 
