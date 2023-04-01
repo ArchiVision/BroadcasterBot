@@ -13,7 +13,7 @@ import java.util.Optional;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class CnnPostGather implements PostGather {
+public class CnnPostGather extends AbstractRssPostGather {
     private volatile List<SimplePostEvent> previousPosts;
     private final RssPostsResolver rssPostsResolver;
 
@@ -38,11 +38,6 @@ public class CnnPostGather implements PostGather {
         return Optional.of(returnDistinctPosts(previousPosts, simplePostEvents));
     }
 
-    public List<SimplePostEvent> callCnnRss() {
-        final String rssFeedUrl = "http://rss.cnn.com/rss/cnn_latest.rss";
-        return rssPostsResolver.resolveBatchFromRssUrl(rssFeedUrl);
-    }
-
     public List<SimplePostEvent> returnDistinctPosts(List<SimplePostEvent> oldBatch, List<SimplePostEvent> newBatch) {
         if (newBatch == null || oldBatch == null) {
             return null;
@@ -56,5 +51,15 @@ public class CnnPostGather implements PostGather {
         }
 
         return distinctPosts;
+    }
+
+    @Override
+    public String getRssUri() {
+        return "http://rss.cnn.com/rss/cnn_latest.rss";
+    }
+
+    @Override
+    public RssPostsResolver getRssPostResolver() {
+        return rssPostsResolver;
     }
 }
