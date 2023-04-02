@@ -1,17 +1,17 @@
 package com.archivision.broadcaster.postsource;
 
-import com.archivision.broadcaster.postgather.CnnPostGather;
 import com.archivision.broadcaster.postgather.PostGather;
+import com.archivision.broadcaster.postgather.WiredPostGather;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CnnPostSource extends AbstractPostSource {
-    private final CnnPostGather cnnPostGather;
+public class WiredPostSource extends AbstractPostSource {
+    private final WiredPostGather wiredPostGather;
 
     @Override
     public PostGather getPostGather() {
-        return cnnPostGather;
+        return wiredPostGather;
     }
 }

@@ -9,22 +9,22 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
-import static com.archivision.broadcaster.rss.RssFeedUrl.CNN;
+import static com.archivision.broadcaster.rss.RssFeedUrl.WIRED;
 
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class CnnPostGather extends AbstractRssPostGather {
+public class WiredPostGather extends AbstractRssPostGather {
     private volatile List<SimplePostEvent> previousPosts;
     private final RssPostsResolver rssPostsResolver;
     private final PostHandler postHandler;
 
     @Override
     public Optional<List<SimplePostEvent>> getNewPosts() {
-        log.info("Trying to get latest posts from: {}", getRssUri());
+        log.info("Trying to get latest posts from Wired...");
 
         final List<SimplePostEvent> simplePostEvents = callRss();
-        log.info("Resolved {} posts from cnn", simplePostEvents == null ? 0 : simplePostEvents.size());
+        log.info("Resolved {} posts from wired", simplePostEvents == null ? 0 : simplePostEvents.size());
 
         if (previousPosts == null && simplePostEvents != null) {
             previousPosts = simplePostEvents;
@@ -42,7 +42,7 @@ public class CnnPostGather extends AbstractRssPostGather {
 
     @Override
     public String getRssUri() {
-        return CNN.getUrl();
+        return WIRED.getUrl();
     }
 
     @Override
