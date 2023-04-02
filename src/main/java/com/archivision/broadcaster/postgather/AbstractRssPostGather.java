@@ -26,7 +26,7 @@ public abstract class AbstractRssPostGather implements RssPostGather {
         log.info("Trying to get latest posts from: {}", getRssUri());
 
         final List<SimplePostEvent> simplePostEvents = callRss();
-        log.info("Resolved {} posts from cnn", simplePostEvents == null ? 0 : simplePostEvents.size());
+        log.info("Resolved {} posts", simplePostEvents == null ? 0 : simplePostEvents.size());
 
         if (previousPosts == null && simplePostEvents != null) {
             previousPosts = simplePostEvents;
