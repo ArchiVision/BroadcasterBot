@@ -5,7 +5,7 @@ import com.archivision.broadcaster.bot.command.util.InputCommandMapper;
 import com.archivision.broadcaster.domain.CommunicationData;
 import com.archivision.broadcaster.messagesender.MessageSender;
 import com.archivision.broadcaster.service.user.UsersService;
-import com.archivision.broadcaster.util.command.BotCmds;
+import com.archivision.broadcaster.util.command.AdminCommands;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -53,7 +53,7 @@ public class BotUpdateHandler {
     }
 
     private boolean isNotAdminUserUsesAdminCmd(String textFromUser, Long userId) {
-        return !usersService.isAdmin(userId) && BotCmds.checkInputIsAdminCmd(textFromUser);
+        return !usersService.isAdmin(userId) && AdminCommands.checkInputIsAdminCmd(textFromUser);
     }
 
     private Predicate<RequestCommand> getAppropriateHandlerByUserInputCmd(String textFromUser) {

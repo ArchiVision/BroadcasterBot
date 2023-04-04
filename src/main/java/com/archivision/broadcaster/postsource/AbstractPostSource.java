@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 @NoArgsConstructor(force = true)
 @Component
-public abstract class AbstractPostSource implements PostSource {
+public abstract class AbstractPostSource {
     @Autowired
     private final EventQueue eventQueue;
 

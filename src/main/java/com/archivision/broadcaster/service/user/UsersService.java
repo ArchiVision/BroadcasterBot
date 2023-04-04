@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -43,12 +44,18 @@ public class UsersService {
         final Set<User> allUsersByTopic = userRepository.findUsersByTopicNames(event.getTopics());
         if (!allUsersByTopic.isEmpty()) {
             log.info("Notifying users: {}, by topics : {}", allUsersByTopic, event.getTopics());
-            usersNotifierExecutorService.submit(() -> {
-                for (User user : allUsersByTopic) {
-                    messageSender.sendMessage(user.getTelegramUserId().toString(), event.getBodyText());
-                }
-            });
+            usersNotifierExecutorService.submit(() ->
+                    allUsersByTopic.stream()
+                            .takeWhile(user -> user.getDontSendAfter() == null
+                                    || user.getDontSendAfter().isAfter(LocalTime.now()))
+                            .filter(user -> !user.getIsPausedGettingPost())
+                            .forEach(user -> sendMsgToUser(user, event))
+            );
         }
+    }
+
+    private void sendMsgToUser(User user, PostEvent event) {
+        messageSender.sendMessage(user.getTelegramUserId().toString(), event.getBodyText());
     }
 
     @Transactional
@@ -59,6 +66,18 @@ public class UsersService {
         }
         Topic topic = topicService.findOrCreateTopic(topicName);
         return user.addTopic(topic);
+    }
+
+    @Transactional
+    public void pauseReceivingPostForUser(Long tgUserId, boolean toPause) {
+        User user = findByTelegramUserId(tgUserId);
+        user.setIsPausedGettingPost(toPause);
+    }
+
+    @Transactional
+    public void setUserDontSendAfterValue(Long telegramUserId, LocalTime time) {
+        User user = userRepository.findByTelegramUserId(telegramUserId);
+        user.setDontSendAfter(time);
     }
 
     public boolean isAdmin(Long tgId) {

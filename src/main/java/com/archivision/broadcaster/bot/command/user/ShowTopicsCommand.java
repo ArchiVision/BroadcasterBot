@@ -5,8 +5,8 @@ import com.archivision.broadcaster.domain.CommunicationData;
 import com.archivision.broadcaster.domain.entity.Topic;
 import com.archivision.broadcaster.domain.entity.User;
 import com.archivision.broadcaster.repo.UserRepository;
-import com.archivision.broadcaster.util.command.BotCmds;
 import com.archivision.broadcaster.util.command.CmdResponseTemplates;
+import com.archivision.broadcaster.util.command.UserCommands;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -45,6 +45,6 @@ public class ShowTopicsCommand implements RequestCommand {
 
     @Override
     public String getCommandName() {
-        return BotCmds.SHOW_TOPICS;
+        return UserCommands.SHOW_TOPICS.getValue();
     }
 }

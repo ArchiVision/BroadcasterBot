@@ -2,7 +2,7 @@ package com.archivision.broadcaster.bot.command.user;
 
 import com.archivision.broadcaster.bot.command.RequestCommand;
 import com.archivision.broadcaster.domain.CommunicationData;
-import com.archivision.broadcaster.util.command.BotCmds;
+import com.archivision.broadcaster.util.command.UserCommands;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,6 +17,6 @@ public class ShowMediaCommand implements RequestCommand {
 
     @Override
     public String getCommandName() {
-        return BotCmds.AVAILABLE_MEDIA;
+        return UserCommands.AVAILABLE_MEDIA.getValue();
     }
 }

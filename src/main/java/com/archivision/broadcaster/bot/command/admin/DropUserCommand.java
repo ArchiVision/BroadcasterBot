@@ -3,7 +3,7 @@ package com.archivision.broadcaster.bot.command.admin;
 import com.archivision.broadcaster.bot.command.RequestCommand;
 import com.archivision.broadcaster.domain.CommunicationData;
 import com.archivision.broadcaster.service.user.UsersService;
-import com.archivision.broadcaster.util.command.BotCmds;
+import com.archivision.broadcaster.util.command.AdminCommands;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +31,6 @@ public class DropUserCommand implements RequestCommand {
 
     @Override
     public String getCommandName() {
-        return BotCmds.DROP_USER;
+        return AdminCommands.DROP_USER.getValue();
     }
 }

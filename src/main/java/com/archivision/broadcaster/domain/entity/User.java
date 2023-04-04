@@ -1,8 +1,21 @@
 package com.archivision.broadcaster.domain.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -20,6 +33,12 @@ public class User {
 
     @Column(name = "telegram_user_id")
     private Long telegramUserId;
+
+    @Column(name = "getting_paused")
+    private Boolean isPausedGettingPost = false;
+
+    @Column(name = "dont_send_after")
+    private LocalTime dontSendAfter;
 
     @Setter(AccessLevel.PRIVATE)
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
