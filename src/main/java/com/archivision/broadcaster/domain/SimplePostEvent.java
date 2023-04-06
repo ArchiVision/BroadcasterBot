@@ -18,6 +18,6 @@ public final class SimplePostEvent implements PostEvent {
 
     @Override
     public String getBodyText() {
-        return mediaOriginName + "\n\n" + title + "\n\n" + description + "\n\n" + postTime + "\n\n" + linkToOriginal;
+        return title + "\n\n" + description + "\n\n" + postTime + "\n\n" + linkToOriginal;
     }
 }

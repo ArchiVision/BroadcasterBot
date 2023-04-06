@@ -11,7 +11,9 @@ public class ShowMediaCommand implements RequestCommand {
     public CommunicationData perform(CommunicationData data) {
         return new CommunicationData("""
                 Here is currently available media resources:
-                    Medium
+                    The Verge
+                    CNN
+                    Wired
                 """, data.telegramUserId());
     }
 

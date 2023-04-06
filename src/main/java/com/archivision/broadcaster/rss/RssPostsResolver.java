@@ -38,7 +38,7 @@ public class RssPostsResolver {
 
                 final String title = entry.getTitle();
                 SyndContent syndContent = entry.getDescription();
-                String description = "*Empty*";
+                String description = "*Service settled empty description*";
                 if (syndContent != null) {
                     description = syndContent.getValue();
                 }
