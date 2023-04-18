@@ -40,7 +40,7 @@ public class TopicResolver {
                 String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
                 if (pos.startsWith("NN")) {
                     String lemma = token.get(CoreAnnotations.LemmaAnnotation.class);
-                    topics.add(lemma);
+                    topics.add(lemma.toLowerCase());
                 }
             }
         }
