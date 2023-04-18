@@ -45,4 +45,6 @@ public abstract class AbstractPostSource {
     }
 
     public abstract PostGather getPostGather();
+
+    public abstract String getPostSourceName();
 }

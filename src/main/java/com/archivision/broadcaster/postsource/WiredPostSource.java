@@ -5,6 +5,8 @@ import com.archivision.broadcaster.postgather.WiredPostGather;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static com.archivision.broadcaster.postsource.PostSource.WIRED;
+
 @Service
 @RequiredArgsConstructor
 public class WiredPostSource extends AbstractPostSource {
@@ -13,5 +15,10 @@ public class WiredPostSource extends AbstractPostSource {
     @Override
     public PostGather getPostGather() {
         return wiredPostGather;
+    }
+
+    @Override
+    public String getPostSourceName() {
+        return WIRED.getSourceName();
     }
 }

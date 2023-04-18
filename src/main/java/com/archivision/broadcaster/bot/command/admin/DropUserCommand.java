@@ -15,7 +15,7 @@ public class DropUserCommand implements RequestCommand {
 
     @Override
     public CommunicationData perform(CommunicationData data) {
-        Long telegramUserId = data.telegramUserId();
+        final Long telegramUserId = data.telegramUserId();
         final String[] inputTextArray = data.text().split(" ");
 
         if (inputTextArray.length != 2) {
@@ -23,7 +23,7 @@ public class DropUserCommand implements RequestCommand {
         }
 
         final Long userId = Long.parseLong(inputTextArray[1]);
-        boolean isUserRemoved = usersService.removeUser(userId);
+        final boolean isUserRemoved = usersService.removeUser(userId);
         String respText = "User with id=" + userId + " has not been remove from db";
         if (isUserRemoved) respText = respText.replace(" not", "");
         return new CommunicationData(respText, telegramUserId);
